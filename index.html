@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Split &amp; Merge Studio — Corpo + Face + IA</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Header & Pipeline Stepper -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-logo">S&amp;M</div>
+        <div>
+          <div class="brand-title">Split &amp; Merge Studio</div>
+          <div class="brand-sub">Corpo &amp; Face • Fluxo Manual com IA</div>
+        </div>
+      </div>
+
+      <nav class="stepper" id="stepperNav" aria-label="Etapas do fluxo"></nav>
+
+      <div class="topbar-actions">
+        <div class="save-folder-box" title="Pasta padrão para salvar imagens geradas no app">
+          <span class="folder-label">📁 Salvar em:</span>
+          <select id="selDataFolder" class="folder-select" title="Pasta de destino dentro de /data"></select>
+          <button class="btn btn-xs btn-ghost" id="btnOpenDataFolder" title="Abrir pasta de downloads no Windows Explorer">Abrir</button>
+        </div>
+        <button class="btn btn-sm btn-ghost" id="btnLoadDemo" title="Carrega um par de imagens de demonstração para testar todo o fluxo">
+          ✨ Exemplo
+        </button>
+        <button class="btn btn-sm btn-ghost" id="btnResetAll" title="Limpar projeto atual">
+          ↺ Novo
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="workspace">
+      <!-- Interactive Canvas Area -->
+      <section class="stage-area">
+        <div class="canvas-toolbar">
+          <div class="toolbar-group" id="stageModeToolbar"></div>
+
+          <div class="toolbar-group">
+            <button class="tool-pill active" id="btnToggleOverlay" title="Mostrar ou ocultar linhas de corte e máscaras">
+              Guias
+            </button>
+            <button class="tool-pill" id="btnZoomOut" title="Diminuir zoom">−</button>
+            <span class="zoom-readout" id="zoomReadout">100%</span>
+            <button class="tool-pill" id="btnZoomIn" title="Aumentar zoom">+</button>
+            <button class="tool-pill" id="btnZoomFit" title="Ajustar imagem à tela com margem externa">Ajustar</button>
+          </div>
+        </div>
+
+        <div class="canvas-wrapper" id="canvasDropWrap">
+          <canvas id="mainCanvas"></canvas>
+        </div>
+
+        <footer class="stage-footer">
+          <div id="stageHintText">
+            Segure o mouse: corte tocando 2 bordas (pode vir de fora) ou feche um laço.
+          </div>
+          <div>
+            <span class="kbd">Espaço</span> + Arrastar: Mover vista &nbsp;•&nbsp;
+            <span class="kbd">Scroll</span>: Zoom &nbsp;•&nbsp;
+            <span class="kbd">Ctrl+V</span>: Colar imagem
+          </div>
+        </footer>
+      </section>
+
+      <!-- Right Inspector Panel -->
+      <aside class="sidebar">
+        <div class="sidebar-scroll" id="sidebarContent"></div>
+      </aside>
+    </main>
+  </div>
+
+  <!-- Hidden File Inputs -->
+  <input type="file" id="fileInputImg1" accept="image/*" hidden />
+  <input type="file" id="fileInputImg2" accept="image/*" hidden />
+  <input type="file" id="fileInputRefined" accept="image/*" hidden />
+  <input type="file" id="fileInputAutoPair" accept="image/*" multiple hidden />
+  <input type="file" id="fileInputAutoImg1" accept="image/*" hidden />
+  <input type="file" id="fileInputAutoFace" accept="image/*" hidden />
+
+  <!-- Modal: Auto Seleção via Rosto Isolado -->
+  <div class="modal-backdrop" id="modalAutoSelect">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">✨ Auto Selecionar com Rosto Isolado</div>
+        <button class="btn-close" id="btnCloseAutoModal" title="Fechar">✕</button>
+      </div>
+      <p class="help-text">
+        Envie a imagem completa e a imagem com o <strong>rosto já isolado</strong>. O complemento do rosto será selecionado automaticamente como <strong>corpo</strong>.
+      </p>
+
+      <div class="auto-pair-banner">
+        <div style="font-size:11px;font-weight:600;color:#e0f2fe">Mais Rápido: Selecione os 2 arquivos juntos no Explorer</div>
+        <button class="btn btn-primary btn-sm" id="btnAutoPickBoth">📂 Selecionar os 2 Arquivos Juntos</button>
+      </div>
+
+      <div class="auto-slots-grid">
+        <div class="piece-card" id="cardAutoSlotImg1">
+          <div class="piece-title"><span>1. Imagem Completa</span><span class="badge" id="badgeAutoImg1">Pendente</span></div>
+          <div class="piece-thumb-wrap" id="thumbAutoImg1" style="height:56px"></div>
+          <div class="piece-actions">
+            <button class="btn btn-sm" id="btnAutoChooseImg1">📂 Escolher</button>
+            <button class="btn btn-sm" id="btnAutoPasteImg1">📋 Colar</button>
+          </div>
+        </div>
+
+        <div class="piece-card featured" id="cardAutoSlotFace">
+          <div class="piece-title"><span>2. Rosto Isolado</span><span class="badge cyan" id="badgeAutoFace">Pendente</span></div>
+          <div class="piece-thumb-wrap" id="thumbAutoFace" style="height:56px"></div>
+          <div class="piece-actions">
+            <button class="btn btn-sm btn-primary" id="btnAutoChooseFace">📂 Escolher</button>
+            <button class="btn btn-sm" id="btnAutoPasteFace">📋 Colar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:4px">
+        <button class="btn btn-ghost btn-sm" id="btnAutoCancel">Cancelar</button>
+        <button class="btn btn-emerald btn-sm" style="flex:1" id="btnAutoApply" disabled>
+          ✨ Aplicar Separação Automática
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Alinhador por Olhos (Calibrador IPD) -->
+  <div class="modal-backdrop" id="modalEyeCalibrate">
+    <div class="modal-box" style="max-width: 650px;">
+      <div class="modal-header">
+        <div class="modal-title">🎯 Alinhamento por Olhos (Calibrador IPD)</div>
+        <button class="btn-close" id="btnCloseEyeModal" title="Fechar">✕</button>
+      </div>
+      <p class="help-text">
+        Clique nas pupilas para calcular escala e rotação anatômicas exatas.
+        Ordem: <strong>Olho Esquerdo</strong> depois <strong>Olho Direito</strong>.
+      </p>
+
+      <div class="eye-calib-grid">
+        <div class="eye-calib-card" id="eyeCardImg1">
+          <div class="eye-calib-title">
+            <span>1. imagem1 (Original)</span>
+            <span class="badge" id="badgeEyeImg1">Clique Olho Esquerdo</span>
+          </div>
+          <div class="eye-canvas-wrap">
+            <canvas id="canvasEyeImg1"></canvas>
+          </div>
+          <div class="eye-stats" id="statsEyeImg1">IPD: —</div>
+        </div>
+
+        <div class="eye-calib-card" id="eyeCardImg2">
+          <div class="eye-calib-title">
+            <span>2. imagem2 (Referência)</span>
+            <span class="badge" id="badgeEyeImg2">Pendente</span>
+          </div>
+          <div class="eye-canvas-wrap">
+            <canvas id="canvasEyeImg2"></canvas>
+          </div>
+          <div class="eye-stats" id="statsEyeImg2">IPD: —</div>
+        </div>
+      </div>
+
+      <div class="eye-calc-banner" id="eyeCalcBanner">
+        <span id="eyeCalcStatus">Posicione os 2 olhos na imagem1 e os 2 olhos na imagem2</span>
+      </div>
+
+      <div class="btn-row" style="margin-top:2px">
+        <button class="btn btn-ghost btn-sm" id="btnEyeResetPoints">↺ Limpar Pontos</button>
+        <button class="btn btn-ghost btn-sm" id="btnEyeCancel">Cancelar</button>
+        <button class="btn btn-emerald btn-sm" style="flex:1" id="btnEyeApply" disabled>
+          ✨ Aplicar Alinhamento Anatômico
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- App Modules (standard defer scripts work both on file:// and http://localhost!) -->
+  <script defer src="js/geometry.js"></script>
+  <script defer src="js/imageOps.js"></script>
+  <script defer src="js/seamMerge.js"></script>
+  <script defer src="js/skinMatch.js"></script>
+  <script defer src="js/viewport.js"></script>
+  <script defer src="js/prompts.js"></script>
+  <script defer src="js/app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,54 @@
+# IMAGE EDITING PROMPT: AI AVATAR FACE AND HAIRSTYLE REPLACEMENT WITH STRICT PIXEL PRESERVATION
+
+Replace the original AI avatar's facial identity and hairstyle in the **first image** using the provided reference images. Both subjects are AI-generated avatars.
+
+**The first image is the immutable source of the final composition. The reference images are the exclusive sources for BOTH facial identity and hairstyle.**
+
+### 1. Facial Identity and Hairstyle Replacement
+- Reproduce the reference avatar's facial identity accurately, including facial structure, proportions, eyes, eyebrows, nose, lips, jawline, and skin tone.
+- Reproduce the reference avatar's hairstyle, including haircut, shape, length, hairline, texture, volume, and color.
+- Do not retain or incorporate any facial or hairstyle characteristics from the original avatar.
+- Adapt the replacement face and hair naturally to the original head position, orientation, perspective, lighting, and rendering style.
+
+### 2. Absolute Original Image Preservation
+Everything outside the specifically authorized facial modification area must remain **pixel-identical to the first image**.
+
+Preserve without modification:
+- Original image dimensions, resolution, aspect ratio, and proportions.
+- Body, anatomy, clothing, accessories, and pose.
+- Background, environment, objects, and lighting.
+- Camera angle, framing, perspective, colors, textures, and shadows.
+
+**Do not crop, resize, extend, reconstruct, regenerate, or reinterpret any part of the original image.** The final image must have exactly the same dimensions and composition as the first image.
+
+### 3. Transparent PNG: Cut-Off Areas Must Remain Untouched
+
+Treat every transparent or completely black/white region in the provided PNG as an **intentional cut-off area**, not as missing information that needs completion.
+
+- Transparent areas represent absent content. Do not fill, reconstruct, imagine, or generate anything within them.
+- Black/white areas must remain black. Never interpret them as transparency or hidden information.
+- Never infer what might exist behind, around, or within these cut-off regions.
+- Do not generate missing anatomy, hair, clothing, background, or other visual details.
+
+### 4. Critical Attention to Cut-Off Boundaries and Edges
+
+**Pay particular attention to the exact boundaries of transparent and black/white cut-off regions.**
+
+- Preserve the original image's visible contours, silhouettes, and edges exactly wherever they are not explicitly authorized for modification.
+- Do not smooth, extend, reshape, blend, or reconstruct the edges of cut-off areas.
+- Do not introduce new pixels, details, shadows, textures, or transitions beyond the explicitly authorized modification regions.
+- Maintain perfect continuity between modified and unmodified areas, without shifting, distorting, or altering their original boundaries.
+
+### 5. Final Requirements
+
+Produce a single edited image satisfying all of the following:
+
+1. Reference avatar's facial identity and hairstyle.
+2. Original image's exact dimensions, proportions, framing, and composition.
+3. Pixel-identical preservation of every unrelated region.
+4. Transparent areas remain unfilled; black/white areas remain black.
+5. All cut-off boundaries and surrounding edges remain exactly as represented in the source.
+6. No invented, inferred, or reconstructed visual information.
+7. Generated hair should be behind the shoulders.
+
+**ABSOLUTE PRIORITY: PRESERVE THE FIRST IMAGE PIXEL BY PIXEL, EXCEPT FOR THE EXPLICITLY AUTHORIZED FACIAL AND HAIR MODIFICATIONS. NEVER COMPLETE CUT-OFF AREAS. NEVER INVENT MISSING CONTENT. THE ORIGINAL EDGES AND SILHOUETTES MUST REMAIN UNCHANGED.**
